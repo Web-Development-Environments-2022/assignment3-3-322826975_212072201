@@ -11,7 +11,7 @@
         {{ recipe.title }}
       </div>
       <ul class="recipe-overview">
-        <li>{{ recipe.readyInMinutes }} minutes</li>
+        <li>{{ recipe.time_to_cook }} minutes</li>
         <li>{{ recipe.aggregateLikes }} likes</li>
       </ul>
     </div>
