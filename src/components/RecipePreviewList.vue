@@ -64,16 +64,17 @@ export default {
       let address = this.$root.store.server_domain;
       console.log(this.$props.is_random)
       if (this.$props.is_random=="true"){
-        address+="/recipes/"
+        address+="/users/get_3_last"
       }
       else
       {
         address+="/users/get_3_last"
       }
         const response = await this.axios.get(
-          address
-          // this.$root.store.server_domain + "/recipes/get_3_random",
-          // "https://test-for-3-2.herokuapp.com/recipes/random"
+          address,
+          // this.$root.store.server_domain + "/users/get_3_last",
+          // "https://test-for-3-2.herokuapp.com/recipes/random",
+          {withCredentials:true},
         );
 
         console.log(response);

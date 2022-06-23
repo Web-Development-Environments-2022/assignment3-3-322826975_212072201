@@ -99,15 +99,17 @@ export default {
           this.$root.store.server_domain +"/Login",
           // "http://132.72.65.211:80/Login",
           // "http://132.73.84.100:80/Login",
-
           {
             username: this.form.username,
             password: this.form.password
-          }
+          },
+          {withCredentials:true},
         );
         console.log(response);
         // this.$root.loggedIn = true;
-        console.log(this.$root.store.login);
+        //console.log(this.$root.store.login);
+        //this.$cookie.set("username", response.data.username, "expiring time")
+        // console(this.$cookies.get("session"));
         this.$root.store.login(this.form.username);
         this.$router.push("/");
       } catch (err) {

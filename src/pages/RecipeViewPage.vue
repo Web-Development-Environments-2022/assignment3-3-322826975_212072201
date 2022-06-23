@@ -43,6 +43,24 @@
 
 <script>
 export default {
+  mounted(){
+    try{
+      this.axios.put(
+      this.$root.store.server_domain+`/users/mark-as-watched/${recipe.id}`,
+      {withCredentials:true}
+      // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
+      // {
+      //   params: { recipeID: this.$route.params.recipeId }
+      // }
+    );
+}
+  catch (error) {
+    console.log("error.response.status", error.response.status);
+    this.$router.replace("/NotFound");
+    return;
+      }
+
+  },
   data() {
     return {
       recipe: null

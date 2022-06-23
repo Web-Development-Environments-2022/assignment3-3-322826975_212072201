@@ -5,6 +5,7 @@ import axios from "axios";
 
 import routes from "./routes";
 import VueRouter from "vue-router";
+import VueCookies from "vue-cookies";
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -13,6 +14,9 @@ const router = new VueRouter({
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import { BPagination } from 'bootstrap-vue'
+Vue.component('b-pagination', BPagination)
+
 import {
   FormGroupPlugin,
   FormPlugin,
@@ -63,6 +67,7 @@ axios.interceptors.response.use(
 );
 
 Vue.use(VueAxios, axios);
+Vue.use(VueCookies);
 
 Vue.config.productionTip = false;
 
@@ -78,10 +83,8 @@ const shared_data = {
     localStorage.removeItem("username");
     this.username = undefined;
   },
-  server_domain:  "http://localhost:80",
+  server_domain:  "http://perricipes.cs.bgu.ac.il:443",
 };
-
-
 
 //console.log(shared_data);
 // Vue.prototype.$root.store = shared_data;
