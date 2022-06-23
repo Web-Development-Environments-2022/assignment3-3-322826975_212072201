@@ -52,16 +52,38 @@ export default {
     try {
       let response;
       // response = this.$route.params.response;
-
+      let obj={
+          id: 660227,
+          image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
+          ingredients_list: (5) [{id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'}, 
+          {id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'},
+          {id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'},
+          {id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'},
+          {id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'}
+          ],
+          instructions: "Place all ingredients in a blender and blend until smooth.",
+          isPrefered: false,
+          isWatched: false,
+          pieces_amount: 1,
+          popularity: 7,
+          time_to_cook: 45,
+          title: "Skinny Green Monster Smoothie",
+          vegan: false,
+          vegetarian: false,
+          gluten_free_sign: true
+        }
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
+          this.$root.store.server_domain+"/recipes"
+          // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
           // {
           //   params: { recipeID: this.$route.params.recipeId }
           // }
         );
-        console.log(response)
+        
+        
+        //console.log(response)
         // console.log("response.status", response.status);
         if (response.status !== 200) this.$router.replace("/NotFound");
       } catch (error) {
@@ -86,7 +108,8 @@ export default {
         pieces_amount,
         isPrefered,
         isWatched
-      } = response.data.recipes_objects[0];
+      // } = response.data.recipes_objects[0];
+      }=obj;
       {
 }
 
