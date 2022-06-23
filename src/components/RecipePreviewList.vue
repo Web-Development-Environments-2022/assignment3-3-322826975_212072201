@@ -23,6 +23,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    is_random:{
+      type: String,
+      required: true
     }
   },
   data() {
@@ -55,15 +59,25 @@ export default {
           vegetarian: false,
           gluten_free_sign: true
         }
+      
       try {
+      let address = this.$root.store.server_domain;
+      console.log(this.$props.is_random)
+      if (this.$props.is_random=="true"){
+        address+="/recipes/"
+      }
+      else
+      {
+        address+="/users/get_3_last"
+      }
         const response = await this.axios.get(
-          this.$root.store.server_domain + "/recipes",
+          address
           // this.$root.store.server_domain + "/recipes/get_3_random",
           // "https://test-for-3-2.herokuapp.com/recipes/random"
         );
 
         console.log(response);
-        const recipes=[obj,obj,obj]
+        let recipes=[obj,obj,obj]
         // const recipes = response.data.recipes_objects;
         
         this.recipes = [];
