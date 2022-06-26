@@ -73,6 +73,12 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   username: localStorage.username,
+  lastSearchText: localStorage.lastSearchText,
+  lastSearchNum:localStorage.lastSearchNum,
+  lastSearchCuisine:localStorage.lastSearchCuisine,
+  lastSearchDiet:localStorage.lastSearchDiet,
+  lastSearchIntolerance:localStorage.lastSearchIntolerance,
+
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -81,9 +87,31 @@ const shared_data = {
   logout() {
     console.log("logout");
     localStorage.removeItem("username");
+    localStorage.removeItem("lastSearchText");
+    localStorage.removeItem("lastSearchNum");
+    localStorage.removeItem("lastSearchCuisine");
+    localStorage.removeItem("lastSearchDiet");
+    localStorage.removeItem("lastSearchIntolerance");
     this.username = undefined;
+    this.lastSearchText = undefined;
+    this.lastSearchNum = undefined;
+    this.lastSearchCuisine = undefined;
+    this.lastSearchDiet = undefined;
+    this.lastSearchIntolerance = undefined;
   },
   server_domain:  "http://perricipes.cs.bgu.ac.il:443",
+  search(s,num,c,d,i){
+    localStorage.setItem("lastSearchText",s);
+    localStorage.setItem("lastSearchNum",num);
+    localStorage.setItem("lastSearchCuisine",c);
+    localStorage.setItem("lastSearchDiet",d);
+    localStorage.setItem("lastSearchIntolerance",i);
+    this.lastSearchText=s;
+    this.lastSearchNum=num;
+    this.lastSearchCuisine=c;
+    this.lastSearchDiet=d;
+    this.lastSearchIntolerance=i;
+  }
 };
 
 //console.log(shared_data);

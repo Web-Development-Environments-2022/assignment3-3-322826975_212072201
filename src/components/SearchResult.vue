@@ -32,6 +32,7 @@
 import { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill, BIconClockFill } from 'bootstrap-vue'
 
 export default {
+  name:"SearchResult",
   mounted() {
     this.axios.get(this.recipe.image).then((i) => {
       this.image_load = true;
@@ -73,29 +74,6 @@ const response = await this.axios.put(
     }
   }   
 };
-// id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
   
 </script>
 

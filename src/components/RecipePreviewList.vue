@@ -50,12 +50,12 @@ export default {
           ],
           instructions: "Place all ingredients in a blender and blend until smooth.",
           isPrefered: false,
-          isWatched: false,
+          isWatched: true,
           pieces_amount: 1,
           popularity: 7,
           time_to_cook: 45,
           title: "Skinny Green Monster Smoothie",
-          vegan: false,
+          vegan: true,
           vegetarian: false,
           gluten_free_sign: true
         }
@@ -64,11 +64,11 @@ export default {
       let address = this.$root.store.server_domain;
       console.log(this.$props.is_random)
       if (this.$props.is_random=="true"){
-        address+="/users/get_3_last"
+        address+="/users/"
       }
       else
       {
-        address+="/users/get_3_last"
+        address+="/users/"
       }
         const response = await this.axios.get(
           address,

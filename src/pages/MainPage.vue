@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <h1 class="title">Main Page</h1>
-    <!-- <RecipePreviewList title="Randome Recipes" class="RandomRecipes center" is_random="true" /> -->
-    <router-link v-if="!$root.store.username" to="/login" tag="button">You need to Login to vue this</router-link>
-    {{ !$root.store.username }}
-    <RecipePreviewList
+
+
+    <RecipePreviewList title="Randome Recipes" class="RandomRecipes center" is_random="true" />
+    <RecipePreviewList v-if="$root.store.username"
       title="Last Viewed Recipes"
       is_random="false"
       :class="{
@@ -14,19 +14,23 @@
       }"
       disabled
     ></RecipePreviewList>
+
+    <LoginForm v-if="!$root.store.username"></LoginForm>
     <!-- <div
       style="position: absolute;top: 70%;left: 50%;transform: translate(-50%, -50%);"
     >
       Centeredasdasdad
-    </div>-->
+    </div> -->
   </div>
 </template>
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList";
+import LoginForm from "../components/LoginForm.vue";
 export default {
   components: {
-    RecipePreviewList
+    RecipePreviewList,
+    LoginForm
   }
 };
 </script>
