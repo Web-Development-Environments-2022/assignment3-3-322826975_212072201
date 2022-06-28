@@ -48,7 +48,7 @@
           <div class="wrapped">
             Instructions:
             <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
+              <li v-for="s in recipe.instructions" :key="s.number">
                 {{ s.step }}
               </li>
             </ol>
@@ -69,19 +69,6 @@ import { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill
 
 export default {
   mounted() {
-    try {
-      this.axios.put(
-        this.$root.store.server_domain + `/users/mark-as-watched/${recipe.id}`
-        // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
-        // {
-        //   params: { recipeID: this.$route.params.recipeId }
-        // }
-      );
-    } catch (error) {
-      console.log("error.response.status", error.response.status);
-      this.$router.replace("/NotFound");
-      return;
-    }
   },
   components:{
         BIconClockFill,
@@ -99,63 +86,10 @@ BIconPatchCheckFill
   async created() {
     try {
       let response;
-      // response = this.$route.params.response;
-      let obj = {
-        id: 660227,
-        image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-        ingredients_list: (5)[
-          {
-            id: 9040,
-            aisle: "Produce",
-            image: "bananas.jpg",
-            consistency: "SOLID",
-            name: "banana",
-          },
-          {
-            id: 9040,
-            aisle: "Produce",
-            image: "bananas.jpg",
-            consistency: "SOLID",
-            name: "banana",
-          },
-          {
-            id: 9040,
-            aisle: "Produce",
-            image: "bananas.jpg",
-            consistency: "SOLID",
-            name: "banana",
-          },
-          {
-            id: 9040,
-            aisle: "Produce",
-            image: "bananas.jpg",
-            consistency: "SOLID",
-            name: "banana",
-          },
-          {
-            id: 9040,
-            aisle: "Produce",
-            image: "bananas.jpg",
-            consistency: "SOLID",
-            name: "banana",
-          }
-        ],
-        instructions:
-          "Place all ingredients in a blender and blend until smooth.",
-        isPrefered: false,
-        isWatched: false,
-        pieces_amount: 1,
-        popularity: 7,
-        time_to_cook: 45,
-        title: "Skinny Green Monster Smoothie",
-        vegan: false,
-        vegetarian: false,
-        gluten_free_sign: true,
-      };
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId
+          this.$root.store.server_domain + "/users/get_created_recipe/"+this.$route.params.recipeId
           // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
           // {
           //   params: { recipeID: this.$route.params.recipeId }
@@ -172,7 +106,7 @@ BIconPatchCheckFill
       }
 
       let {
-        analyzedInstructions,
+        // analyzedInstructions,
         instructions,
         // extendedIngredients,
         time_to_cook,
@@ -187,21 +121,21 @@ BIconPatchCheckFill
         pieces_amount,
         isPrefered,
         isWatched,
-        } = response.data.recipes_objects[0];
+        } = response.data.recipes[0];
       // } = obj;
       {
       }
 
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
+      // let _instructions = analyzedInstructions
+      //   .map((fstep) => {
+      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+      //     return fstep.steps;
+      //   })
+      //   .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
         // instructions,
-        _instructions,
+        // // _instructions,
         // analyzedInstructions,
         // extendedIngredients,
         // aggregateLikes,

@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
+axios.defaults.withCredentials=true;
 import routes from "./routes";
 import VueRouter from "vue-router";
 import VueCookies from "vue-cookies";
@@ -14,8 +14,20 @@ const router = new VueRouter({
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import './assets/sass/index.sass'
 import { BPagination } from 'bootstrap-vue'
 Vue.component('b-pagination', BPagination)
+import { BModal } from 'bootstrap-vue'
+Vue.component('b-modal', BModal)
+import { VBModal } from 'bootstrap-vue'
+// Note: Vue automatically prefixes the directive name with 'v-'
+Vue.directive('b-modal', VBModal)
+import { BFormTextarea } from 'bootstrap-vue'
+Vue.component('b-form-textarea', BFormTextarea)
+import { BFormRadioGroup } from 'bootstrap-vue'
+Vue.component('b-form-radio-group', BFormRadioGroup)
+import { ModalPlugin } from 'bootstrap-vue'
+Vue.use(ModalPlugin)
 
 import {
   FormGroupPlugin,
@@ -99,7 +111,8 @@ const shared_data = {
     this.lastSearchDiet = undefined;
     this.lastSearchIntolerance = undefined;
   },
-  server_domain:  "http://perricipes.cs.bgu.ac.il:443",
+  // server_domain:  "http://perricipes.cs.bgu.ac.il:443",
+  server_domain:  "http://localhost:80",
   search(s,num,c,d,i){
     localStorage.setItem("lastSearchText",s);
     localStorage.setItem("lastSearchNum",num);

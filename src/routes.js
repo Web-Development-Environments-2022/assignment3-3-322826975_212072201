@@ -18,15 +18,37 @@ const routes = [
     component: () => import("./pages/LoginPage"),
   },
   {
+    path: "/about",
+    name: "about",
+    component: () => import("./pages/AboutPage"),
+  },
+  {
     path: "/search",
     name: "search",
     component: () => import("./pages/SearchPage"),
   },
   {
+    path: "/favorites",
+    name: "favorites",
+    component: () => import("./pages/Favorites"),
+  },
+  {
+    path: "/mycreated",
+    name: "mycreated",
+    component: () => import("./pages/MyCreated"),
+  },
+
+  {
     path: "/recipe/:recipeId",
     name: "recipe",
     component: () => import("./pages/RecipeViewPage"),
   },
+  {
+    path: "/myrecipe/:recipeId",
+    name: "myrecipe",
+    component: () => import("./pages/MyRecipeViewPage"),
+  },
+
   {
     path: "*",
     name: "notFound",

@@ -1,11 +1,11 @@
 <template>
 <div>
-  <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+  <router-link 
+    :to="{ name: this.link, params: { recipeId: recipe.id } }"
     class="recipe-preview"
   >
     <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+      <img :src="recipe.image" class="recipe-image" />
     </div>
     <div class="recipe-footer">
       <div :title="recipe.title" class="recipe-title">
@@ -33,19 +33,26 @@ import { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill
 
 export default {
   mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
+    
+  },
+  created(){
+    if (this.is_my_created=='true'){
+      this.link='myrecipe'
+    }
   },
   data() {
     return {
-      image_load: false
+      link:'recipe'
     };
   },
   props: {
     recipe: {
       type: Object,
       required: true
+    },
+    is_my_created:{
+      type:String,
+      default:()=>'false'
     }
   },
   components:{

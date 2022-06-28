@@ -47,12 +47,24 @@
 
             <b-navbar-nav class="ml-auto">
               <b-nav-item-dropdown text="Personal Area" right>
-                <b-dropdown-item href="#">Favorites</b-dropdown-item>
-                <b-dropdown-item href="#">My recipes</b-dropdown-item>
+                <b-dropdown-item href="#"><router-link :to="{ name: 'favorites' }"
+                  >Favorites</router-link
+                ></b-dropdown-item>
+                <b-dropdown-item href="#"><router-link :to="{ name: 'mycreated' }"
+                  >My recipes</router-link
+                ></b-dropdown-item>
                 <b-dropdown-item href="#">Family recipes</b-dropdown-item>
               </b-nav-item-dropdown>
               <b-nav-item href="#"><button @click="Logout">Logout</button></b-nav-item>
-              <b-nav-item href="#">New Recipe</b-nav-item>
+              <div>
+              <b-nav-item href="#"><b-button v-b-modal.modal-1>New Recipe</b-button>
+              
+  <b-modal id="modal-1" ok-only ok-title="Cancel" ok-variant="dark"  title="Hey Chef, enter your recipe ">
+    <new-recipe-form @exit="closeModal"></new-recipe-form>
+    
+  </b-modal>
+  </b-nav-item>
+</div>
             </b-navbar-nav>
 </b-navbar-nav>
           </b-collapse>
@@ -64,7 +76,10 @@
 </template>
 
 <script>
+import NewRecipeForm from './components/NewRecipeForm.vue';
+
 export default {
+  components: { NewRecipeForm},
   name: "App",
   methods: {
     Logout() {
@@ -75,6 +90,10 @@ export default {
         this.$forceUpdate();
       });
     },
+    closeModal(){
+      // console.log("iam closing it");
+      this.$bvModal.hide('modal-1');
+    }
   },
 };
 </script>

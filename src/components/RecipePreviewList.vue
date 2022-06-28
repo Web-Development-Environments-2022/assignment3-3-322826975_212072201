@@ -6,7 +6,7 @@
     </h3>
     <b-row>
       <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
+        <RecipePreview :is_my_created="is_my_created" class="recipePreview" :recipe="r" />
       </b-col>
     </b-row>
   </b-container>
@@ -27,6 +27,14 @@ export default {
     is_random:{
       type: String,
       required: true
+    },
+    is_favorite:{
+      type:String,
+      default:()=>"false"
+    },
+    is_my_created:{
+      type:String,
+      default:()=>"false"
     }
   },
   data() {
@@ -64,11 +72,24 @@ export default {
       let address = this.$root.store.server_domain;
       console.log(this.$props.is_random)
       if (this.$props.is_random=="true"){
-        address+="/users/"
+        address+="/recipes/get_3_random"
       }
       else
       {
-        address+="/users/"
+        if (this.$props.is_favorite=="true"){
+            address+="/users/favorites"
+        }
+        else{
+                  if (this.$props.is_my_created=="true"){
+            address+="/users/get_my_created"
+        }
+        else{
+          address+="/users/get_3_last"
+
+        }
+
+
+        }
       }
         const response = await this.axios.get(
           address,
@@ -78,9 +99,14 @@ export default {
         );
 
         console.log(response);
-        let recipes=[obj,obj,obj]
-        // const recipes = response.data.recipes_objects;
-        
+        // let recipes=[obj,obj,obj]
+        let recipes;
+        if (this.$props.is_my_created=="true"){
+          recipes= response.data.recipes;
+        }
+        else
+          recipes = response.data.recipes_objects;
+
         this.recipes = [];
         this.recipes.push(...recipes);
         // console.log(this.recipes);
