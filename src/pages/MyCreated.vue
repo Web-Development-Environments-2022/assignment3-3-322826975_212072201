@@ -6,6 +6,7 @@
       is_random="false"
       is_my_created="true"
       :class="{
+        row: true,
         RandomRecipes: true,
         blur: !$root.store.username,
         center: true
@@ -29,6 +30,10 @@ export default {
 <style lang="scss" scoped>
 .RandomRecipes {
   margin: 10px 0 10px;
+}
+
+.row{
+  justify-items:flex-end;
 }
 .blur {
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */

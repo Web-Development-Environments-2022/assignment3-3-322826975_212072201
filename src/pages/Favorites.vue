@@ -6,6 +6,7 @@
       is_random="false"
       is_favorite="true"
       :class="{
+        row: true,
         RandomRecipes: true,
         blur: !$root.store.username,
         center: true
@@ -33,6 +34,9 @@ export default {
 .blur {
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
   filter: blur(2px);
+}
+.row{
+  justify-items:flex-end;
 }
 ::v-deep .blur .recipe-preview {
   pointer-events: none;
