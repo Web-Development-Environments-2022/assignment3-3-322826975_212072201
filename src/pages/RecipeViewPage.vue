@@ -101,7 +101,7 @@ BIconPatchCheckFill
       let response;
       // response = this.$route.params.response;
       let obj = {
-        id: 660227,
+        id: 340,
         image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
         ingredients_list: (5)[
           {
@@ -154,8 +154,9 @@ BIconPatchCheckFill
       };
       try {
         response = await this.axios.get(
+          this.$root.store.server_domain + "/users/",
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId
+          // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId
           // this.$root.store.server_domain + "/recipes/full_recipe/"+this.$route.params.recipeId,
           // {
           //   params: { recipeID: this.$route.params.recipeId }
@@ -172,7 +173,7 @@ BIconPatchCheckFill
       }
 
       let {
-        analyzedInstructions,
+        // analyzedInstructions,
         instructions,
         // extendedIngredients,
         time_to_cook,
@@ -187,21 +188,21 @@ BIconPatchCheckFill
         pieces_amount,
         isPrefered,
         isWatched,
-        } = response.data.recipes_objects[0];
-      // } = obj;
+        // } = response.data.recipes_objects[0];
+      } = obj;
       {
       }
 
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
+      // let _instructions = analyzedInstructions
+      //   .map((fstep) => {
+      //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+      //     return fstep.steps;
+      //   })
+      //   .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
         // instructions,
-        _instructions,
+        // _instructions,
         // analyzedInstructions,
         // extendedIngredients,
         // aggregateLikes,

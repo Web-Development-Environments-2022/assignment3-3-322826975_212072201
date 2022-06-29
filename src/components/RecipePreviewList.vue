@@ -48,7 +48,7 @@ export default {
   methods: {
     async updateRecipes() {
       let obj={
-          id: 660227,
+          id: 340,
           image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
           ingredients_list: (5) [{id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'}, 
           {id: 9040, aisle: 'Produce', image: 'bananas.jpg', consistency: 'SOLID', name: 'banana'},
@@ -72,25 +72,27 @@ export default {
       let address = this.$root.store.server_domain;
       console.log(this.$props.is_random)
       if (this.$props.is_random=="true"){
-        address+="/recipes/get_3_random"
+        // address+="/recipes/get_3_random"
+        // address+="/"
       }
       else
       {
         if (this.$props.is_favorite=="true"){
-            address+="/users/favorites"
+            // address+="/users/favorites"
         }
         else{
                   if (this.$props.is_my_created=="true"){
-            address+="/users/get_my_created"
+            // address+="/users/get_my_created"
         }
         else{
-          address+="/users/get_3_last"
+          // address+="/users/get_3_last"
 
         }
 
 
         }
       }
+      address+="/users"
         const response = await this.axios.get(
           address,
           // this.$root.store.server_domain + "/users/get_3_last",
@@ -99,13 +101,13 @@ export default {
         );
 
         console.log(response);
-        // let recipes=[obj,obj,obj]
-        let recipes;
-        if (this.$props.is_my_created=="true"){
-          recipes= response.data.recipes;
-        }
-        else
-          recipes = response.data.recipes_objects;
+        let recipes=[obj,obj,obj]
+        // let recipes;
+        // if (this.$props.is_my_created=="true"){
+        //   recipes= response.data.recipes;
+        // }
+        // else
+        //   recipes = response.data.recipes_objects;
 
         this.recipes = [];
         this.recipes.push(...recipes);
