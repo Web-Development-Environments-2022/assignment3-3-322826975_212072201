@@ -4,6 +4,54 @@
     :to="{ name: this.link, params: { recipeId: recipe.id } }"
     class="recipe-preview"
   >
+  <b-card
+    no-body
+    style="max-width: 25rem; margin-bottom: 10px; margin-right: 0px;"
+    :img-src="recipe.image"
+    img-alt="Image"
+    img-top
+  >
+    <template #header>
+      <h4 class="mb-0">
+        <div :title="recipe.title">
+          {{ recipe.title }}
+        </div></h4>
+    </template>
+
+    <b-list-group>
+      <b-list-group-item class="list">Time to make: {{ recipe.time_to_cook }} minutes <b-icon-clock-fill></b-icon-clock-fill></b-list-group-item>
+    </b-list-group>
+    <b-list-group>
+      <b-list-group-item class="list">Popularity: {{ recipe.popularity }}<b-icon-hand-thumbs-up-fill></b-icon-hand-thumbs-up-fill></b-list-group-item>
+    </b-list-group>
+    <b-list-group v-if="recipe.vegan">
+      <b-list-group-item v-if="recipe.vegan" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegan</b-list-group-item>
+    </b-list-group>
+    <b-list-group v-if="recipe.vegetarian">
+      <b-list-group-item v-if="recipe.vegetarian" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegetarian</b-list-group-item>
+    </b-list-group>
+    <b-list-group v-if="recipe.gluten_free_sign">
+      <b-list-group-item v-if="recipe.gluten_free_sign" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Gluten-Free</b-list-group-item>
+    </b-list-group>
+    <b-list-group v-if="recipe.isWatched">
+      <b-list-group-item v-if="recipe.isWatched" class="list"><b-icon-eye-fill></b-icon-eye-fill></b-list-group-item>
+    </b-list-group>
+    <b-list-group v-if="recipe.isPrefered">
+      <b-list-group-item v-if="recipe.isPrefered" class="list"><b-icon-heart-fill></b-icon-heart-fill></b-list-group-item>
+    </b-list-group>
+
+    <b-card-body v-if="recipe.isPrefered==false && $root.store.username" >
+      <b-button v-if="recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" style="margin-left: 30%;" variant="outline-info" >Mark as favorite</b-button>
+    </b-card-body>
+
+  </b-card>
+  </router-link>
+</div>
+<!-- <div>
+  <router-link 
+    :to="{ name: this.link, params: { recipeId: recipe.id } }"
+    class="recipe-preview"
+  >
     <div class="recipe-body">
       <img :src="recipe.image" class="recipe-image" />
     </div>
@@ -25,7 +73,7 @@
   </router-link>
         <b-button v-if="recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" variant="outline-info">Mark as favorite</b-button>
 
-</div>
+</div> -->
 </template>
 
 <script>
@@ -55,13 +103,8 @@ export default {
       default:()=>'false'
     }
   },
-  components:{
-    BIconClockFill,
-BIconHandThumbsUpFill,
-BIconHeartFill,
-BIconEyeFill,
-BIconPatchCheckFill
-  },
+  components: { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill, BIconClockFill } ,
+  
   methods:{
     async MarkAsFavorite(){
       try{
@@ -106,79 +149,17 @@ const response = await this.axios.put(
   
 </script>
 
-<style scoped>
-.recipe-preview {
-  display: inline-block;
-  width: 90%;
-  height: 100%;
-  position: relative;
-  margin: 10px 10px;
+<style>
+.b-list-group-item {
+  color: red;
 }
-.recipe-preview > .recipe-body {
-  width: 100%;
-  height: 200px;
-  position: relative;
+.recipe-preview{
+  color: black
 }
 
-.recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  display: block;
-  width: 100px;
-  height: auto;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-}
 
-.recipe-preview .recipe-footer {
-  width: 100%;
-  height: 50%;
-  overflow: hidden;
-}
-
-.recipe-preview .recipe-footer .recipe-title {
-  padding: 10px 10px;
-  width: 100%;
-  font-size: 12pt;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-}
-
-.recipe-preview .recipe-footer ul.recipe-overview {
-  padding: 5px 10px;
-  width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1 auto;
-  -ms-flex: 1 auto;
-  flex: 1 auto;
-  table-layout: fixed;
-  margin-bottom: 0px;
-}
-
-.recipe-preview .recipe-footer ul.recipe-overview li {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-  width: 90px;
-  display: table-cell;
-  text-align: center;
+.list {
+  padding-left: 20px;
+  font-size: 18px;
 }
 </style>

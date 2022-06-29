@@ -4,11 +4,9 @@
       {{ title }}:
       <slot></slot>
     </h3>
-    <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview :is_my_created="is_my_created" class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
+    <b-col v-for="r in recipes" :key="r.id">
+      <RecipePreview :is_my_created="is_my_created" class="recipePreview" :recipe="r" />
+    </b-col>
   </b-container>
 </template>
 
