@@ -15,7 +15,7 @@ import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import './assets/sass/index.sass'
-import { BPagination } from 'bootstrap-vue'
+import {BPagination } from 'bootstrap-vue'
 Vue.component('b-pagination', BPagination)
 import { BModal } from 'bootstrap-vue'
 Vue.component('b-modal', BModal)
@@ -28,6 +28,9 @@ import { BFormRadioGroup } from 'bootstrap-vue'
 Vue.component('b-form-radio-group', BFormRadioGroup)
 import { ModalPlugin } from 'bootstrap-vue'
 Vue.use(ModalPlugin)
+import { BListGroup } from 'bootstrap-vue'
+Vue.component('b-list-group', BListGroup)
+
 
 import {
   FormGroupPlugin,
