@@ -194,7 +194,7 @@ export default {
       // console.log("search clicked")
       let recipes = [
         {
-          id: 660227,
+          id: 340,
           image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
           ingredients_list: (5)[
             ({
