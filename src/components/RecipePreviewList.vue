@@ -4,11 +4,9 @@
       {{ title }}:
       <slot></slot>
     </h3>
-    <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview :is_my_created="is_my_created" class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
+    <b-col v-for="r in recipes" :key="r.id">
+      <RecipePreview :is_my_created="is_my_created" class="recipePreview" :recipe="r" />
+    </b-col>
   </b-container>
 </template>
 
@@ -86,10 +84,7 @@ export default {
         }
         else{
           // address+="/users/get_3_last"
-
         }
-
-
         }
       }
       address+="/users"
@@ -99,7 +94,6 @@ export default {
           // "https://test-for-3-2.herokuapp.com/recipes/random",
           {withCredentials:true},
         );
-
         console.log(response);
         let recipes=[obj,obj,obj]
         // let recipes;
@@ -108,7 +102,6 @@ export default {
         // }
         // else
         //   recipes = response.data.recipes_objects;
-
         this.recipes = [];
         this.recipes.push(...recipes);
         // console.log(this.recipes);

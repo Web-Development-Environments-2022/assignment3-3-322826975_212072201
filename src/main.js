@@ -28,6 +28,8 @@ import { BFormRadioGroup } from 'bootstrap-vue'
 Vue.component('b-form-radio-group', BFormRadioGroup)
 import { ModalPlugin } from 'bootstrap-vue'
 Vue.use(ModalPlugin)
+import { BListGroup } from 'bootstrap-vue'	
+Vue.component('b-list-group', BListGroup)
 
 import {
   FormGroupPlugin,

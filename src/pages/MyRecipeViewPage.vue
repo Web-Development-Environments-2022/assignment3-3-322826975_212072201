@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
         <div>
