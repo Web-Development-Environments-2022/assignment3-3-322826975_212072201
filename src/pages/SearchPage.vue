@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <b-form inline @submit.prevent="onSearch" @reset.prevent="onReset">
+    <div ><h3 class="title">Search</h3></div>
+    
+    <b-form @submit.prevent="onSearch" @reset.prevent="onReset" class="search">
       <b-form-group
         id="input-group-search"
         label-cols-sm="3"
@@ -11,7 +13,7 @@
           id="search"
           v-model="$v.form.search.$model"
           type="text"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          class="mb-2 mr-sm-2 mb-sm-0 space"
           :state="validateState('search')"
         ></b-form-input>
         <b-form-invalid-feedback v-if="!$v.form.search.required">
@@ -24,21 +26,18 @@
         label-cols-sm="3"
         label="Number: "
         label-for="number"
+
       >
         <b-form-select
           id="number"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          class="mb-2 mr-sm-2 mb-sm-0 space"
           :options="[
             { text: '5', value: 5 },
             { text: '10', value: 10 },
             { text: '15', value: 15 },
           ]"
-          :state="validateState('number')"
           v-model="$v.form.number.$model"
         ></b-form-select>
-        <b-form-invalid-feedback v-if="!$v.form.number.required">
-          Number is required
-        </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
@@ -83,11 +82,12 @@
       <b-button
         type="submit"
         variant="primary"
-        style="width:100px;display:block;"
-        class="mx-auto w-100"
+        style="width:100px;display:inline;"
+        class="mx-auto"
+
         >Search</b-button
-      >
-      <b-button type="reset" variant="danger">Reset</b-button>
+      >&nbsp;
+      <b-button type="reset" variant="outline-danger" style="width:75px;display:inline;" class="mx-auto">Reset</b-button>
     </b-form>
 
     <b-alert
@@ -96,41 +96,46 @@
       variant="warning"
       dismissible
       show
-    >
+    >{{form.submitError}}
     </b-alert>
-    <div v-show="!$root.store.lastSearch">
-    <h2>
-      Last search:
-    </h2>
-    <span>
-      Text: {{ $root.store.lastSearchText }} |
-    Number: {{ $root.store.lastSearchNum }} | Cuisine: {{ $root.store.lastSearchCuisine
-    }} | Diet: {{ $root.store.lastSearchDiet }} | Intolerance: {{ $root.store.lastSearchIntolerance }}
-    </span>
-    <br><br>   </div>
+    <br><br>
+    <table>
+      <tr>
+        <th>
+          <h3 v-if="recipes.length > 0">Results</h3>
+          <b-container>
+          <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-dark" class="m-2">
+          <b-dropdown-item @click="sort('timeAsc')">Cooking time asc</b-dropdown-item>
+          <b-dropdown-item @click="sort('timeDes')">Cooking time desc</b-dropdown-item>
+          <b-dropdown-item @click="sort('popularityAsc')">Popularity asc</b-dropdown-item>
+          <b-dropdown-item @click="sort('popularityDes')">Popularity desc</b-dropdown-item>
+          </b-dropdown>
+          <br><br>
+            <!-- <b-button @click="sort('time')" type="reset" variant="outline-info"
+              >Order by time to cook</b-button
+            >
+            <b-button @click="sort('popularity')" type="reset" variant="outline-info"
+              >Order by popularity</b-button
+            > -->
 
-    
+            <b-row v-for="r in recipes" :key="r.id">
+              <RecipePreview class="recipePreview" :recipe="r" />
+            </b-row>
+          </b-container>
+        </th>
+        <th>
+        <h2 v-if="recipes.length == 0 && $root.store.username && $root.store.lastSearchResults && !form.submitError" style="text-align: center;">
+        <br>
+          <div v-show="$root.store.lastSearchResults">Here is your last search:
+            <r v-for="r in $root.store.lastSearchResults" :key="r.id">
+              <RecipePreview class="recipePreview" :recipe="r" />
+            </r>
+          </div>
+        </h2>
+        </th>
+      </tr>
+    </table>
 
-    <h2 v-if="recipes.length > 0">Results:</h2>
-    <b-container>
-        <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-primary" class="m-2">
-    <b-dropdown-item @click="sort('timeAsc')">Cooking time asc</b-dropdown-item>
-    <b-dropdown-item @click="sort('timeDes')">Cooking time desc</b-dropdown-item>
-    <b-dropdown-item @click="sort('popularityAsc')">Popularity asc</b-dropdown-item>
-    <b-dropdown-item @click="sort('popularityDes')">Popularity desc</b-dropdown-item>
-  </b-dropdown>
-
-      <!-- <b-button @click="sort('time')" type="reset" variant="outline-info"
-        >Order by time to cook</b-button
-      >
-      <b-button @click="sort('popularity')" type="reset" variant="outline-info"
-        >Order by popularity</b-button
-      > -->
-
-      <b-row v-for="r in recipes" :key="r.id">
-        <SearchResult class="recipePreview" :recipe="r" />
-      </b-row>
-    </b-container>
   </div>
 </template>
 
@@ -138,21 +143,19 @@
 import cuisines from "../assets/cuisines.js";
 import diets from "../assets/diets.js";
 import intolerances from "../assets/intolerances.js";
-
 import { required } from "vuelidate/lib/validators";
-import SearchResult from "../components/SearchResult";
-
+import RecipePreview from "../components/RecipePreview";
 export default {
   name: "Search",
   components: {
-    SearchResult,
-  },
+    RecipePreview
+},
   data() {
     return {
       recipes: [],
       form: {
         search: "",
-        number: "",
+        number: "5",
         cuisine: null,
         diet: null,
         intolerance: null,
@@ -182,7 +185,6 @@ export default {
     this.cuisines.push(...cuisines);
     this.diets.push(...diets);
     this.intolerances.push(...intolerances);
-
     // console.log($v);
   },
   methods: {
@@ -350,58 +352,6 @@ export default {
           gluten_free_sign: true,
         },
       ];
-      // let obj = {
-      //   id: 660227,
-      //   image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-      //   ingredients_list: (5)[
-      //     ({
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     })
-      //   ],
-      //   instructions:
-      //     "Place all ingredients in a blender and blend until smooth.",
-      //   isPrefered: false,
-      //   isWatched: false,
-      //   pieces_amount: 1,
-      //   popularity: 7,
-      //   time_to_cook: 45,
-      //   title: "Skinny Green Monster Smoothie",
-      //   vegan: false,
-      //   vegetarian: false,
-      //   gluten_free_sign: true,
-      // };
       try {
         const response = await this.axios.get(
           this.$root.store.server_domain + `/users/`
@@ -418,19 +368,23 @@ export default {
           // withCredentials:true
           // }
         );
-
         // let recipes = [obj, obj, obj];
         // const recipes = response.data.recipes_objects;
-
         this.recipes = [];
         this.recipes.push(...recipes);
+        console.log(this.recipes);
+        if (recipes.length== 0){
+          this.form.submitError = "No results found!";
+        }
+
         if (this.$root.store.username) {
           this.$root.store.search(
             this.form.search,
             this.form.number,
             this.form.cuisine,
             this.form.diet,
-            this.form.intolerance
+            this.form.intolerance,
+            this.recipes
           );
         }
         // [
@@ -440,7 +394,6 @@ export default {
         // {id:diet,value:this.form.diets},
         // {id:intolerance,value:this.form.intolerances}
         // ]);
-
         // console.log("search finished");
       } catch (err) {
         console.log(err.response);
@@ -459,7 +412,7 @@ export default {
     onReset() {
       this.form = {
         search: "",
-        number: "",
+        number: "5",
         cuisine: "",
         diet: "",
         intolerance: "",
@@ -474,7 +427,6 @@ export default {
           this.recipes.sort(function(a, b) {
             return parseFloat(a.popularity) - parseFloat(b.popularity);
           });
-
           break;
         case "popularityDes":
           this.recipes.sort(function(a, b) {
@@ -485,7 +437,6 @@ export default {
           this.recipes.sort(function(a, b) {
             return parseFloat(a.time_to_cook) - parseFloat(b.time_to_cook);
           });
-
           break;
         case "timeDes":
           this.recipes.sort(function(a, b) {
@@ -499,4 +450,24 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.search{
+  border-width: 2px;
+  border-style: solid;
+  border-color: red;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 25px;
+  border: 2px solid #283a0c;
+  // font-family: Garamond, serif;
+  // font-size: 25px;
+}
+
+
+.title{
+  margin-top: 0px;
+  text-align: center;
+  // font-family: Garamond, serif
+  
+}
+</style>

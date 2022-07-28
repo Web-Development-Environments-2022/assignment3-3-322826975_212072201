@@ -1,9 +1,6 @@
 <template>
 <div>
-  <router-link 
-    :to="{ name: this.link, params: { recipeId: recipe.id } }"
-    class="recipe-preview"
-  >
+  
   <b-card
     no-body
     style="max-width: 25rem; margin-bottom: 10px; margin-right: 0px;"
@@ -11,18 +8,29 @@
     img-alt="Image"
     img-top
   >
-    <template #header>
-      <h4 class="mb-0">
+  <br>
+
+<div>
+  <router-link 
+    :to="{ name: this.link, params: {recipeId: recipe.id}, query:{is_my_created:this.is_my_created,is_my_family:this.is_my_family } }"
+    class="recipe-preview"
+  >
+        <b-list-group>
+      <b-list-group-item class="list">
+              <h4 class="mb-0">
         <div :title="recipe.title">
           {{ recipe.title }}
         </div></h4>
-    </template>
 
-    <b-list-group>
-      <b-list-group-item class="list">Time to make: {{ recipe.time_to_cook }} minutes <b-icon-clock-fill></b-icon-clock-fill></b-list-group-item>
+        </b-list-group-item>
+    </b-list-group>
+
+    <br>
+      <b-list-group>
+      <b-list-group-item class="list"><b-icon-clock-fill></b-icon-clock-fill> Time to make: {{ recipe.time_to_cook }} minutes </b-list-group-item>
     </b-list-group>
     <b-list-group>
-      <b-list-group-item class="list">Popularity: {{ recipe.popularity }}<b-icon-hand-thumbs-up-fill></b-icon-hand-thumbs-up-fill></b-list-group-item>
+      <b-list-group-item class="list"><b-icon-facebook></b-icon-facebook> Popularity: {{ recipe.popularity }} Likes</b-list-group-item>
     </b-list-group>
     <b-list-group v-if="recipe.vegan">
       <b-list-group-item v-if="recipe.vegan" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegan</b-list-group-item>
@@ -33,62 +41,41 @@
     <b-list-group v-if="recipe.gluten_free_sign">
       <b-list-group-item v-if="recipe.gluten_free_sign" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Gluten-Free</b-list-group-item>
     </b-list-group>
+    <br>
     <b-list-group v-if="recipe.isWatched">
-      <b-list-group-item v-if="recipe.isWatched" class="list"><b-icon-eye-fill></b-icon-eye-fill></b-list-group-item>
+      <b-list-group-item v-if="recipe.isWatched" class="list"><b-icon-eye-fill></b-icon-eye-fill> Watched</b-list-group-item>
     </b-list-group>
-    <b-list-group v-if="recipe.isPrefered">
-      <b-list-group-item v-if="recipe.isPrefered" class="list"><b-icon-heart-fill></b-icon-heart-fill></b-list-group-item>
+    <b-list-group v-if="recipe.isPrefered || !isPressed">
+      <b-list-group-item v-if="recipe.isPrefered || !isPressed" class="list"><b-icon-heart-fill></b-icon-heart-fill> Favorite!</b-list-group-item>
     </b-list-group>
-
-    <b-card-body v-if="recipe.isPrefered==false && $root.store.username" >
-      <b-button v-if="recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" style="margin-left: 30%;" variant="outline-info" >Mark as favorite</b-button>
+  
+  </router-link>
+      <b-card-body v-if="isPressed && recipe.isPrefered==false && $root.store.username && is_my_created==false && is_my_family==false" >
+      <b-button v-if="isPressed && recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" style="margin-left: 30%;font-family: Garamond, serif;" variant="outline-dark" >Mark as favorite <b-icon-heart-fill></b-icon-heart-fill> </b-button>
     </b-card-body>
-
-  </b-card>
-  </router-link>
+<br>
 </div>
-<!-- <div>
-  <router-link 
-    :to="{ name: this.link, params: { recipeId: recipe.id } }"
-    class="recipe-preview"
-  >
-    <div class="recipe-body">
-      <img :src="recipe.image" class="recipe-image" />
-    </div>
-    <div class="recipe-footer">
-      <div :title="recipe.title" class="recipe-title">
-        {{ recipe.title }}
-      </div>
-      <ul class="recipe-overview">
-        <li>{{ recipe.time_to_cook }} minutes <b-icon-clock-fill></b-icon-clock-fill></li>
-        <li>{{ recipe.popularity }} <b-icon-hand-thumbs-up-fill></b-icon-hand-thumbs-up-fill></li>
-        <li v-if="recipe.vegan"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegan</li>
-        <li v-if="recipe.vegetarian"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegetarian</li>
-        <li v-if="recipe.gluten_free_sign"><b-icon-patch-check-fill></b-icon-patch-check-fill> Gluten-Free</li>
-        <li v-if="recipe.isWatched"> <b-icon-eye-fill></b-icon-eye-fill></li>
-        <li v-if="recipe.isPrefered"><b-icon-heart-fill></b-icon-heart-fill></li>
-        
-      </ul>
-    </div>
-  </router-link>
-        <b-button v-if="recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" variant="outline-info">Mark as favorite</b-button>
-</div> -->
+</b-card>
+</div>
 </template>
 
 <script>
-import { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill, BIconClockFill } from 'bootstrap-vue'
+import { BIconPatchCheckFill, BIconFacebook, BIconHeartFill,BIconEyeFill, BIconClockFill } from 'bootstrap-vue'
 export default {
   mounted() {
     
   },
   created(){
-    if (this.is_my_created=='true'){
-      this.link='myrecipe'
-    }
+    // console.log("insideCreated");
+    // console.log(this.is_my_created)
+    // if (this.is_my_created==true){
+    //   this.link='myrecipe'
+    // }
   },
   data() {
     return {
-      link:'recipe'
+      link:'recipe',
+      isPressed:"a"
     };
   },
   props: {
@@ -99,9 +86,13 @@ export default {
     is_my_created:{
       type:String,
       default:()=>'false'
+    },
+    is_my_family:{
+      type:String,
+      default:()=>'false'
     }
   },
-  components: { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill, BIconClockFill } ,
+  components: { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconFacebook, BIconClockFill } ,
   
   methods:{
     async MarkAsFavorite(){
@@ -112,12 +103,13 @@ const response = await this.axios.put(
           // "http://132.73.84.100:80/Login",
           {withCredentials:true},
         );
+        this.isPressed="";
       }
       catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
-          
+      
     }
   }   
 };
@@ -148,8 +140,9 @@ const response = await this.axios.put(
 </script>
 
 <style>
-.b-list-group-item {
-  color: red;
+b-list-group-item {
+  
+  font-family: Garamond, serif;
 }
 .recipe-preview{
   color: black
@@ -157,5 +150,10 @@ const response = await this.axios.put(
 .list {
   padding-left: 20px;
   font-size: 18px;
+}
+
+.mb-0{
+  font-family: Garamond, serif;
+  color:black;
 }
 </style>

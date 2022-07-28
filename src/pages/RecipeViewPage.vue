@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="pageView">
     <br><br><br>
-    <div v-if="recipe">
-  <b-card-group columns>
+    <div v-if="recipe" class="recipeContainer">
+  <b-card-group columns >
     <b-card
       :title="recipe.title"
       :img-src="recipe.image"
@@ -14,7 +14,7 @@
       </b-card-text>
     </b-card>
 
-    <b-card title="Information" text-variant="white" bg-variant="primary"><br>
+    <b-card title="Information" text-variant="white" bg-variant="dark"><br>
       <b-card-text >
         
         <p><b-icon-hand-thumbs-up-fill></b-icon-hand-thumbs-up-fill> {{ recipe.popularity }} </p>
@@ -35,14 +35,14 @@
                 :key="index + '_' + r.id"
               >
               
-                {{ r.original }}
+                {{ r.original }} , {{r.amount}}
               </li>
             </ul>   </b-card-text>
       <b-card-text class="danger-text">For {{recipe.pieces_amount}} servings</b-card-text>
     </b-card>
 
-    <b-card v-if="recipe.isPrefered==false && $root.store.username">
-              <b-button  @click="MarkAsFavorite" variant="outline-info">Mark as favorite</b-button>
+    <b-card v-if="recipe.isPrefered==false && $root.store.username && this.$route.query.is_my_created=='false' && this.$route.query.is_my_family=='false'">
+              <b-button  @click="MarkAsFavorite" variant="outline-dark">Mark as favorite</b-button>
 
     </b-card>
 
@@ -56,71 +56,29 @@
             </ol>
       </b-card-text>
     </b-card>
+<b-card title="Family Stuff" v-if=" this.$route.query.is_my_family=='true'" text-variant="white" bg-variant="dark"><br>
+      <b-card-text >
+        
+        <p><b-icon-person></b-icon-person>  {{ recipe.maker }} </p>
+        <p><b-icon-calendar2-day></b-icon-calendar2-day>  {{ recipe.when_making }} </p>
 
+      </b-card-text>
+    </b-card>
+
+    <b-card v-if=" this.$route.query.is_my_family=='true'"
+      :img-src="recipe.image"
+      img-alt="Image"
+      
+    >
+    </b-card>
 
   </b-card-group>
 </div>
-    <!-- <div v-if="recipe">
-      <div class="recipe-header mt-3 mb-4">
-        <div>
-          <b-card-group deck>
-            <b-card 
-              border-variant="secondary"
-              :header="recipe.title"
-              header-border-variant="secondary"
-              align="center"
-            >
-              <b-card-img
-                :src="recipe.image"
-                img-alt="Card image"                
-                img-left
-                class="center"
-              ></b-card-img>
-            </b-card>
-          </b-card-group>
-        </div>
-
-      </div>
-      <div class="recipe-body">
-        <div class="wrapper">
-          <div class="wrapped">
-            <div class="mb-3">
-                      <li>{{ recipe.time_to_cook }} minutes <b-icon-clock-fill></b-icon-clock-fill></li>
-        <li>{{ recipe.popularity }} <b-icon-hand-thumbs-up-fill></b-icon-hand-thumbs-up-fill></li>
-        <li v-if="recipe.vegan"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegan</li>
-        <li v-if="recipe.vegetarian"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegetarian</li>
-        <li v-if="recipe.gluten_free_sign"><b-icon-patch-check-fill></b-icon-patch-check-fill> Gluten-Free</li>
-        <li v-if="recipe.isWatched"> <b-icon-eye-fill></b-icon-eye-fill></li>
-        <li v-if="recipe.isPrefered"><b-icon-heart-fill></b-icon-heart-fill></li>
-
-            </div>
-            Ingredients:
-            <ul>
-              <li
-                v-for="(r, index) in recipe.ingredients_list"
-                :key="index + '_' + r.id"
-              >
-              
-                {{ r.original }}
-              </li>
-            </ul>
-          </div>
-          <div class="wrapped">
-            Instructions:
-            <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
-                {{ s.step }}
-              </li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
-import { BIconPatchCheckFill, BIconHeartFill,BIconEyeFill, BIconHandThumbsUpFill, BIconClockFill } from 'bootstrap-vue'
+import { BIconPerson, BIconCalendar2Day } from 'bootstrap-vue'
 
 export default {
   mounted() {
@@ -139,12 +97,12 @@ export default {
     }
   },
   components:{
-        BIconClockFill,
-BIconHandThumbsUpFill,
-BIconHeartFill,
-BIconEyeFill,
-BIconPatchCheckFill
+        BIconPerson,
+        BIconCalendar2Day
 
+  },
+  props:{
+    
   },
   data() {
     return {
@@ -587,58 +545,6 @@ BIconPatchCheckFill
             "isPrefered": false,
             "isWatched": false
         };
-      // let obj = {
-      //   id: 340,
-      //   image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-      //   ingredients_list: (5)[
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     }
-      //   ],
-      //   instructions:
-      //     "Place all ingredients in a blender and blend until smooth.",
-      //   isPrefered: false,
-      //   isWatched: false,
-      //   pieces_amount: 1,
-      //   popularity: 7,
-      //   time_to_cook: 45,
-      //   title: "Skinny Green Monster Smoothie",
-      //   vegan: false,
-      //   vegetarian: false,
-      //   gluten_free_sign: true,
-      // };
       try {
         response = await this.axios.get(
           this.$root.store.server_domain + "/users/",
@@ -650,7 +556,7 @@ BIconPatchCheckFill
           // }
         );
 
-        //console.log(response)
+        console.log(response);
         // console.log("response.status", response.status);
         if (response.status !== 200) this.$router.replace("/NotFound");
       } catch (error) {
@@ -679,14 +585,13 @@ BIconPatchCheckFill
       } = obj;
       {
       }
-
+      try{
       let _instructions = analyzedInstructions
         .map((fstep) => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;
         })
         .reduce((a, b) => [...a, ...b], []);
-
       let _recipe = {
         // instructions,
         _instructions,
@@ -713,23 +618,75 @@ BIconPatchCheckFill
       };
 
       this.recipe = _recipe;
+
+      }
+      catch(e){
+      let _instructions = JSON.parse(instructions)
+        .map((fstep) => {
+          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+          return fstep.steps;
+        })
+        .reduce((a, b) => [...a, ...b], []);
+      let _recipe = {
+        _instructions,
+        instructions,
+        time_to_cook,
+        image,
+        title,
+        id,
+        popularity,
+        vegan,
+        vegetarian,
+        gluten_free_sign,
+        ingredients_list,
+        pieces_amount,
+        isPrefered,
+        isWatched,
+      };
+
+      this.recipe = _recipe;
+      this.recipe.ingredients_list=JSON.parse(ingredients_list)
+
+      }
+
     } catch (error) {
       console.log(error);
     }
   },
+  methods:{
+        async MarkAsFavorite(){
+      try{
+const response = await this.axios.put(
+          this.$root.store.server_domain +"/users/mark-as-prefered/"+this.recipe.id,
+          // "http://132.72.65.211:80/Login",
+          // "http://132.73.84.100:80/Login",
+          {withCredentials:true},
+        );
+        this.recipe.isPrefered=true;
+      }
+      catch (err) {
+        console.log(err.response);
+        this.form.submitError = err.response.data.message;
+      }
+      
+    }
+
+  }
 };
 </script>
 
 <style scoped>
 
-.container{
-    display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 200%;
-}
-.wrapper {
+/* .recipePageContainer{
+    position: absolute;
+  width:80%;
+  left:10%;
+  right:10%;
+} */
+/* .wrapper {
   display: flex;
+    width:100%;
+  padding: 0 10% 0  10%;
 }
 .wrapped {
   width: 50%;
@@ -738,7 +695,17 @@ BIconPatchCheckFill
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 100%;
+} */
+
+.pageView{
+  width: 100%;
+}
+
+.recipeContainer{
+    width: 90%;
+    margin-left:5%
+
 }
 /* .recipe-header{
 
