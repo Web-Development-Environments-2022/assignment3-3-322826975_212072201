@@ -37,17 +37,18 @@ const routes = [
     name: "mycreated",
     component: () => import("./pages/MyCreated"),
   },
+  {
+    path: "/myfamily",
+    name: "myfamily",
+    component: () => import("./pages/Family"),
+  },
 
   {
     path: "/recipe/:recipeId",
     name: "recipe",
     component: () => import("./pages/RecipeViewPage"),
   },
-  {
-    path: "/myrecipe/:recipeId",
-    name: "myrecipe",
-    component: () => import("./pages/MyRecipeViewPage"),
-  },
+  
 
   {
     path: "*",
