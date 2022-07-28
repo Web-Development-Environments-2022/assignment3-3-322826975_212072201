@@ -2,9 +2,10 @@
   <div class="container">
 
     <RecipePreviewList v-if="$root.store.username"
-      title="Last Viewed Recipes"
-      is_random="false"
-      is_my_created="true"
+      title="My Recipes"
+      :is_random="false"
+      :is_my_created="true"
+      :is_favorite = "false"
       :class="{
         row: true,
         RandomRecipes: true,
@@ -30,6 +31,8 @@ export default {
 <style lang="scss" scoped>
 .RandomRecipes {
   margin: 10px 0 10px;
+  position: absolute;
+  display: inline-block;
 }
 
 .row{
