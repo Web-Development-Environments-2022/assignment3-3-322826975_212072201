@@ -95,7 +95,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
-      <b-form-group
+      <!-- <b-form-group
         id="input-group-instructions"
         label-cols-sm="3"
         label="Instructions:"
@@ -115,9 +115,56 @@
         <b-form-invalid-feedback>
           Instructions are required
         </b-form-invalid-feedback>
+      </b-form-group> -->
+      <span @click="newInstruction">+ Instruction</span>
+
+      <b-form-group v-for="(val,number) in instructions" :key="number"
+        label="Instruction:"
+        label-cols-sm="3"
+        label-align-sm=""
+        class="mb-0"
+      >
+      <b-form inline>
+        <b-form-textarea 
+          type="text"
+          v-model="val.step"
+          placeholder="Details..."
+        ></b-form-textarea>
+        <b-button variant="outline-danger" @click="removeInstruction(number,$event)">
+            x
+        </b-button>
+      </b-form>
+      <br>
+      </b-form-group>
+      <br><br>
+      <span @click="newIngredient" style="border:1px black">+ Ingredient</span>
+
+      <b-form-group v-for="(val,id) in ingredients" :key="id"
+        label="New Ingredient:"
+        label-cols-sm="3"
+        label-align-sm=""
+        class="mb-0"
+      >
+      <b-form inline>
+        <b-form-input 
+          type="text"
+          v-model="val.original"
+          placeholder="Ingredient Name"
+        ></b-form-input>
+        
+        <b-form-input
+          type="number"
+          v-model="val.amount"
+          placeholder="Amount"
+        ></b-form-input>
+<b-button variant="outline-danger" @click="removeIngredient(id,$event)">
+            x
+        </b-button>
+      </b-form>
+      <br>
       </b-form-group>
 
-      <b-form-group
+      <!-- <b-form-group
         id="input-group-ingredients_list"
         label-cols-sm="3"
         label="Ingredients list:"
@@ -137,7 +184,7 @@
         <b-form-invalid-feedback>
           Ingredients are required
         </b-form-invalid-feedback>
-      </b-form-group>
+      </b-form-group> -->
 
       <b-form-group
         id="input-group-vegetarian"
@@ -150,7 +197,7 @@
           v-model="$v.form.vegetarian.$model"
         :options="vegetarian_options"
         :aria-describedby="ariaDescribedby"
-button-variant="outline-primary"
+button-variant="outline-dark"
 
         buttons
                   id="vegetarian"
@@ -175,7 +222,7 @@ button-variant="outline-primary"
           v-model="$v.form.vegan.$model"
         :options="vegan_options"
         :aria-describedby="ariaDescribedby"
-button-variant="outline-primary"
+button-variant="outline-dark"
 
         buttons
                   id="vegan"
@@ -200,7 +247,7 @@ button-variant="outline-primary"
           v-model="$v.form.gluten_free_sign.$model"
         :options="gluten_free_sign_options"
         :aria-describedby="ariaDescribedby"
-button-variant="outline-primary"
+button-variant="outline-dark"
 
         buttons
                   id="gluten_free_sign"
@@ -216,7 +263,7 @@ button-variant="outline-primary"
 
       <b-button
         type="submit"
-        variant="primary"
+        variant="dark"
         style="width:250px;"
         class="ml-5 w-75"
         >Create</b-button
@@ -248,7 +295,7 @@ export default {
         username: "",
         image: "",
         ingredients_list: "",
-        instructions: "",
+        
         pieces_amount: "",
         popularity: "",
         time_to_cook: "",
@@ -256,7 +303,7 @@ export default {
         vegan: false,
         vegetarian: false,
         gluten_free_sign: false,
-        submitError: undefined
+        submitError: undefined,
       },
       vegan_options:[
           { text: "I'm vegan friendly", value: true },
@@ -271,6 +318,10 @@ export default {
           { text: "I'm not", value: false },
 
       ],
+      ingredients:[],
+      numOfIngredients:0,
+      instructions: [],
+      numOfInstructions:0,
       modal:"",
     };
   },
@@ -280,12 +331,6 @@ export default {
         required,
         url
         
-      },
-      ingredients_list: {
-        required
-      },
-      instructions: {
-        required
       },
       pieces_amount: {
         required,
@@ -327,8 +372,8 @@ export default {
           // "http://132.73.84.100:80/Login",
           {
           image: this.form.image,
-          ingredients_list: this.form.ingredients_list,
-          instructions: this.form.instructions,
+          ingredients_list: JSON.stringify(this.ingredients),
+          instructions: JSON.stringify([{name:"",steps:this.instructions}]),
           pieces_amount: this.form.pieces_amount,
           popularity: this.form.popularity,
           time_to_cook: this.form.time_to_cook,
@@ -347,27 +392,63 @@ export default {
         // this.$root.store.login(this.form.username);
         
         // this.$router.push("/");
+        
         this.$emit('exit');
+
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
     },
     onCreate() {
-      // console.log("login method called");
+      console.log("login method called");
       this.form.submitError = undefined;
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       }
-      // console.log("login method go");
+      console.log("login method go");
       this.Create();
-    }
+    },
+    newIngredient(){
+      // console.log("in");
+      // let leng=1;
+      // this.ingredients_dict[this.numOfIngredients]={name:"",amount:"aa"};
+      // // this.form.ingredients_dict.push({key:leng, value:{name:"",amount:"aa"}});
+      // this.numOfIngredients+=1;
+      // console.log(this.ingredients_dict)
+      // console.log(this.numOfIngredients)
+      // console.log("out")
+
+      this.ingredients.push({
+        original: "",
+        amount: 0,
+        id: this.numOfIngredients
+      });
+      this.numOfIngredients++;
+
+    },
+        removeIngredient(id) {
+      this.$delete(this.ingredients, id);
+    },
+    newInstruction(){
+
+      this.instructions.push({
+        step: "",
+        number: this.numOfInstructions
+      });
+      this.numOfInstructions++;
+
+    },
+        removeInstruction(number) {
+      this.$delete(this.instructions, number);
+    },
+
   }
 };
 </script>
 <style lang="scss" scoped>
 .container {
-  max-width: 400px;
+  max-width: 600px;
 }
 </style>

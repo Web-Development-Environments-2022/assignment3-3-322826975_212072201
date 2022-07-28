@@ -1,7 +1,41 @@
 <template>
   <div class="container">
-    <h1 class="title">Register</h1>
+    <h3 class="title">Register</h3>
     <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
+      <b-form-group
+        id="input-group-firstname"
+        label-cols-sm="3"
+        label="First Name:"
+        label-for="firstname"
+      >
+        <b-form-input
+          id="firstname"
+          v-model="$v.form.firstname.$model"
+          type="text"
+          :state="validateState('firstname')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.firstname.required">
+          Firstname is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-form-group
+        id="input-group-lastname"
+        label-cols-sm="3"
+        label="Last Name:"
+        label-for="lastname"
+      >
+        <b-form-input
+          id="username"
+          v-model="$v.form.lastname.$model"
+          type="text"
+          :state="validateState('lastname')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.lastname.required">
+          Last Name is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
       <b-form-group
         id="input-group-username"
         label-cols-sm="3"
@@ -66,6 +100,13 @@
         >
           Have length between 5-10 characters long
         </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="!$v.form.password.specialValidationAtLeastOneDigit">
+          Password should include at least one digit
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="!$v.form.password.specialValidationAtLeastOneSpecial">
+          Password should include at least one special character
+        </b-form-invalid-feedback>
+
       </b-form-group>
 
       <b-form-group
@@ -90,17 +131,34 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
+      <b-form-group
+        id="input-group-email"
+        label-cols-sm="3"
+        label="Email:"
+        label-for="email"
+      >
+        <b-form-input
+          id="email"
+          v-model="$v.form.email.$model"
+          type="email"
+          :state="validateState('email')"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!$v.form.email.required">
+          Email is required
+        </b-form-invalid-feedback>
+      </b-form-group>
+
       <b-button type="reset" variant="danger">Reset</b-button>
       <b-button
         type="submit"
-        variant="primary"
+        variant="dark"
         style="width:250px;"
         class="ml-5 w-75"
         >Register</b-button
       >
       <div class="mt-2">
         You have an account already?
-        <router-link to="login"> Log in here</router-link>
+        <router-link to="login" style="color:black;text-decoration: underline;"> Log in here</router-link>
       </div>
     </b-form>
     <b-alert
@@ -128,17 +186,33 @@ import {
   maxLength,
   alpha,
   sameAs,
-  email
+  email,
+  helpers
 } from "vuelidate/lib/validators";
+// const specialValidation = helpers.regex("^[a-zA-Z0-9!@#$&()\\-`.+,/\"]*$");
+const specialValidationAtLeastOneDigit = value => {
+  if (typeof value === 'undefined' || value === null || value === '') {
+    return true
+  }
+  return /\d/.test(value)
+}
+
+const specialValidationAtLeastOneSpecialCharacter = value => {
+  if (typeof value === 'undefined' || value === null || value === '') {
+    return true
+  }
+  return /[@_!#$%^&*()<>?/\|}{~:]/.test(value)
+}
 
 export default {
   name: "Register",
+  
   data() {
     return {
       form: {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",
@@ -151,18 +225,30 @@ export default {
     };
   },
   validations: {
+    
     form: {
       username: {
         required,
         length: (u) => minLength(3)(u) && maxLength(8)(u),
         alpha
       },
+      firstname:{
+        required
+      },
+      lastname:{
+        required
+      },
+      email:{
+        required
+      },
       country: {
         required
       },
       password: {
         required,
-        length: (p) => minLength(5)(p) && maxLength(10)(p)
+        length: (p) => minLength(5)(p) && maxLength(10)(p),
+specialValidationAtLeastOneDigit,
+specialValidationAtLeastOneSpecialCharacter
       },
       confirmedPassword: {
         required,
@@ -188,7 +274,11 @@ export default {
 
           {
             username: this.form.username,
-            password: this.form.password
+            password: this.form.password,
+            firstname: this.form.firstname,
+            lastname:this.form.lastname,
+            email:this.form.email,
+            country:this.form.country
           }
         );
         this.$router.push("/login");

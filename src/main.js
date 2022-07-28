@@ -15,7 +15,7 @@ import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import './assets/sass/index.sass'
-import {BPagination } from 'bootstrap-vue'
+import { BPagination } from 'bootstrap-vue'
 Vue.component('b-pagination', BPagination)
 import { BModal } from 'bootstrap-vue'
 Vue.component('b-modal', BModal)
@@ -28,9 +28,10 @@ import { BFormRadioGroup } from 'bootstrap-vue'
 Vue.component('b-form-radio-group', BFormRadioGroup)
 import { ModalPlugin } from 'bootstrap-vue'
 Vue.use(ModalPlugin)
-import { BListGroup } from 'bootstrap-vue'
+import { BListGroup } from 'bootstrap-vue'	
 Vue.component('b-list-group', BListGroup)
-
+import { ImagePlugin } from 'bootstrap-vue'
+Vue.use(ImagePlugin)
 
 import {
   FormGroupPlugin,
@@ -93,6 +94,7 @@ const shared_data = {
   lastSearchCuisine:localStorage.lastSearchCuisine,
   lastSearchDiet:localStorage.lastSearchDiet,
   lastSearchIntolerance:localStorage.lastSearchIntolerance,
+  lastSearchResults:localStorage.lastSearchResults,
 
   login(username) {
     localStorage.setItem("username", username);
@@ -107,29 +109,32 @@ const shared_data = {
     localStorage.removeItem("lastSearchCuisine");
     localStorage.removeItem("lastSearchDiet");
     localStorage.removeItem("lastSearchIntolerance");
+    localStorage.removeItem("lastSearchResults");
     this.username = undefined;
     this.lastSearchText = undefined;
     this.lastSearchNum = undefined;
     this.lastSearchCuisine = undefined;
     this.lastSearchDiet = undefined;
     this.lastSearchIntolerance = undefined;
+    this.lastSearchResults = undefined;
   },
   // server_domain:  "http://perricipes.cs.bgu.ac.il:443",
   server_domain:  "http://localhost:80",
-  search(s,num,c,d,i){
+  search(s,num,c,d,i,lr){
     localStorage.setItem("lastSearchText",s);
     localStorage.setItem("lastSearchNum",num);
     localStorage.setItem("lastSearchCuisine",c);
     localStorage.setItem("lastSearchDiet",d);
     localStorage.setItem("lastSearchIntolerance",i);
+    localStorage.setItem("lastSearchResults",lr);
     this.lastSearchText=s;
     this.lastSearchNum=num;
     this.lastSearchCuisine=c;
     this.lastSearchDiet=d;
     this.lastSearchIntolerance=i;
+    this.lastSearchResults=lr;
   }
 };
-
 //console.log(shared_data);
 // Vue.prototype.$root.store = shared_data;
 

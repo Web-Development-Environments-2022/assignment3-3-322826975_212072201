@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <row>
+
     <RecipePreviewList v-if="$root.store.username"
-      title="Favorite Recipes"
+      title="My Family Recipes"
       :is_random="false"
-      :is_favorite="true"
       :is_my_created="false"
-      :is_my_family="false"
+      :is_my_family="true"
+      :is_favorite = "false"
       :class="{
         row: true,
         RandomRecipes: true,
@@ -15,7 +15,7 @@
       }"
       disabled
     ></RecipePreviewList>
-    </row>
+
   </div>
 </template>
 
@@ -35,12 +35,12 @@ export default {
   position: absolute;
   display: inline-block;
 }
+.row{
+  justify-items:flex-end;
+}
 .blur {
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
   filter: blur(2px);
-}
-.row{
-  justify-items:flex-end;
 }
 ::v-deep .blur .recipe-preview {
   pointer-events: none;

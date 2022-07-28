@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="title"><h1>Search</h1></div>
+    <div ><h3 class="title">Search</h3></div>
     
     <b-form @submit.prevent="onSearch" @reset.prevent="onReset" class="search">
       <b-form-group
@@ -84,9 +84,10 @@
         variant="primary"
         style="width:100px;display:inline;"
         class="mx-auto"
+
         >Search</b-button
-      >
-      <b-button type="reset" variant="danger" style="width:75px;display:inline;" class="mx-auto">Reset</b-button>
+      >&nbsp;
+      <b-button type="reset" variant="outline-danger" style="width:75px;display:inline;" class="mx-auto">Reset</b-button>
     </b-form>
 
     <b-alert
@@ -95,21 +96,21 @@
       variant="warning"
       dismissible
       show
-    >
+    >{{form.submitError}}
     </b-alert>
-
+    <br><br>
     <table>
       <tr>
         <th>
-          <h2 v-if="recipes.length > 0">Results:</h2>
+          <h3 v-if="recipes.length > 0">Results</h3>
           <b-container>
-              <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-primary" class="m-2">
+          <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-dark" class="m-2">
           <b-dropdown-item @click="sort('timeAsc')">Cooking time asc</b-dropdown-item>
           <b-dropdown-item @click="sort('timeDes')">Cooking time desc</b-dropdown-item>
           <b-dropdown-item @click="sort('popularityAsc')">Popularity asc</b-dropdown-item>
           <b-dropdown-item @click="sort('popularityDes')">Popularity desc</b-dropdown-item>
           </b-dropdown>
-
+          <br><br>
             <!-- <b-button @click="sort('time')" type="reset" variant="outline-info"
               >Order by time to cook</b-button
             >
@@ -123,7 +124,7 @@
           </b-container>
         </th>
         <th>
-        <h2 v-if="recipes.length == 0 && $root.store.username" style="text-align: center;">
+        <h2 v-if="recipes.length == 0 && $root.store.username && $root.store.lastSearchResults && !form.submitError" style="text-align: center;">
         <br>
           <div v-show="$root.store.lastSearchResults">Here is your last search:
             <r v-for="r in $root.store.lastSearchResults" :key="r.id">
@@ -142,10 +143,8 @@
 import cuisines from "../assets/cuisines.js";
 import diets from "../assets/diets.js";
 import intolerances from "../assets/intolerances.js";
-
 import { required } from "vuelidate/lib/validators";
 import RecipePreview from "../components/RecipePreview";
-
 export default {
   name: "Search",
   components: {
@@ -186,7 +185,6 @@ export default {
     this.cuisines.push(...cuisines);
     this.diets.push(...diets);
     this.intolerances.push(...intolerances);
-
     // console.log($v);
   },
   methods: {
@@ -354,58 +352,6 @@ export default {
           gluten_free_sign: true,
         },
       ];
-      // let obj = {
-      //   id: 660227,
-      //   image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-      //   ingredients_list: (5)[
-      //     ({
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     },
-      //     {
-      //       id: 9040,
-      //       aisle: "Produce",
-      //       image: "bananas.jpg",
-      //       consistency: "SOLID",
-      //       name: "banana",
-      //     })
-      //   ],
-      //   instructions:
-      //     "Place all ingredients in a blender and blend until smooth.",
-      //   isPrefered: false,
-      //   isWatched: false,
-      //   pieces_amount: 1,
-      //   popularity: 7,
-      //   time_to_cook: 45,
-      //   title: "Skinny Green Monster Smoothie",
-      //   vegan: false,
-      //   vegetarian: false,
-      //   gluten_free_sign: true,
-      // };
       try {
         const response = await this.axios.get(
           this.$root.store.server_domain + `/users/`
@@ -422,13 +368,15 @@ export default {
           // withCredentials:true
           // }
         );
-
         // let recipes = [obj, obj, obj];
         // const recipes = response.data.recipes_objects;
-
         this.recipes = [];
         this.recipes.push(...recipes);
-        console.log(this.recipes)
+        console.log(this.recipes);
+        if (recipes.length== 0){
+          this.form.submitError = "No results found!";
+        }
+
         if (this.$root.store.username) {
           this.$root.store.search(
             this.form.search,
@@ -446,7 +394,6 @@ export default {
         // {id:diet,value:this.form.diets},
         // {id:intolerance,value:this.form.intolerances}
         // ]);
-
         // console.log("search finished");
       } catch (err) {
         console.log(err.response);
@@ -480,7 +427,6 @@ export default {
           this.recipes.sort(function(a, b) {
             return parseFloat(a.popularity) - parseFloat(b.popularity);
           });
-
           break;
         case "popularityDes":
           this.recipes.sort(function(a, b) {
@@ -491,7 +437,6 @@ export default {
           this.recipes.sort(function(a, b) {
             return parseFloat(a.time_to_cook) - parseFloat(b.time_to_cook);
           });
-
           break;
         case "timeDes":
           this.recipes.sort(function(a, b) {
@@ -514,13 +459,15 @@ export default {
   margin-top: 20px;
   border-radius: 25px;
   border: 2px solid #283a0c;
-  font-family: 'EB Garamond';
-  font-size: 20px;
+  // font-family: Garamond, serif;
+  // font-size: 25px;
 }
 
+
 .title{
-  margin-top: 10px;
+  margin-top: 0px;
   text-align: center;
-  font-family: 'EB Garamond'
+  // font-family: Garamond, serif
+  
 }
 </style>
