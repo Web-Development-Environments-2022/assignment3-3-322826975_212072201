@@ -34,7 +34,6 @@ export default {
   position: absolute;
   display: inline-block;
 }
-
 .row{
   justify-items:flex-end;
 }

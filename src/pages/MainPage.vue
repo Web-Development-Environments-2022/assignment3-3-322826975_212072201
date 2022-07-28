@@ -1,10 +1,18 @@
 <template>
   <div class="container">
-    <h1 class="title">Main Page</h1>
-    <RecipePreviewList title="Randome Recipes" class="RandomRecipes center" is_random="true" />
+    
+    
+    <RecipePreviewList title="Random Recipes" class="RandomRecipes center" is_random="true"       
+    :is_favorite="false"
+    :is_my_created="false"
+    :is_my_family="false"
+ />
     <RecipePreviewList v-if="$root.store.username"
       title="Last Viewed Recipes"
       is_random="false"
+      :is_favorite="false"
+      :is_my_created="false"
+      :is_my_family="false"
       :class="{
         LastRecipes: true,
         blur: !$root.store.username,
@@ -13,9 +21,7 @@
       disabled
     ></RecipePreviewList>
 
-    <login_form>
       <LoginForm v-if="!$root.store.username" class="login"></LoginForm>
-    </login_form>
     
     <!-- <div
       style="position: absolute;top: 70%;left: 50%;transform: translate(-50%, -50%);"
@@ -50,8 +56,8 @@ export default {
 .login{
   max-width: 1000px;
   padding-left: 50%;
+  
 }
-
 .blur {
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
   filter: blur(2px);
