@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <b-form inline @submit.prevent="onSearch" @reset.prevent="onReset">
+    <div class="title"><h1>Search</h1></div>
+    
+    <b-form @submit.prevent="onSearch" @reset.prevent="onReset" class="search">
       <b-form-group
         id="input-group-search"
         label-cols-sm="3"
@@ -11,7 +13,7 @@
           id="search"
           v-model="$v.form.search.$model"
           type="text"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          class="mb-2 mr-sm-2 mb-sm-0 space"
           :state="validateState('search')"
         ></b-form-input>
         <b-form-invalid-feedback v-if="!$v.form.search.required">
@@ -24,21 +26,18 @@
         label-cols-sm="3"
         label="Number: "
         label-for="number"
+
       >
         <b-form-select
           id="number"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          class="mb-2 mr-sm-2 mb-sm-0 space"
           :options="[
             { text: '5', value: 5 },
             { text: '10', value: 10 },
             { text: '15', value: 15 },
           ]"
-          :state="validateState('number')"
           v-model="$v.form.number.$model"
         ></b-form-select>
-        <b-form-invalid-feedback v-if="!$v.form.number.required">
-          Number is required
-        </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
@@ -83,11 +82,11 @@
       <b-button
         type="submit"
         variant="primary"
-        style="width:100px;display:block;"
-        class="mx-auto w-100"
+        style="width:100px;display:inline;"
+        class="mx-auto"
         >Search</b-button
       >
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="reset" variant="danger" style="width:75px;display:inline;" class="mx-auto">Reset</b-button>
     </b-form>
 
     <b-alert
@@ -98,39 +97,44 @@
       show
     >
     </b-alert>
-    <div v-show="!$root.store.lastSearch">
-    <h2>
-      Last search:
-    </h2>
-    <span>
-      Text: {{ $root.store.lastSearchText }} |
-    Number: {{ $root.store.lastSearchNum }} | Cuisine: {{ $root.store.lastSearchCuisine
-    }} | Diet: {{ $root.store.lastSearchDiet }} | Intolerance: {{ $root.store.lastSearchIntolerance }}
-    </span>
-    <br><br>   </div>
 
-    
+    <table>
+      <tr>
+        <th>
+          <h2 v-if="recipes.length > 0">Results:</h2>
+          <b-container>
+              <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-primary" class="m-2">
+          <b-dropdown-item @click="sort('timeAsc')">Cooking time asc</b-dropdown-item>
+          <b-dropdown-item @click="sort('timeDes')">Cooking time desc</b-dropdown-item>
+          <b-dropdown-item @click="sort('popularityAsc')">Popularity asc</b-dropdown-item>
+          <b-dropdown-item @click="sort('popularityDes')">Popularity desc</b-dropdown-item>
+          </b-dropdown>
 
-    <h2 v-if="recipes.length > 0">Results:</h2>
-    <b-container>
-        <b-dropdown v-if="recipes.length > 0" id="dropdown-dropright" dropright text="Sort" variant="outline-primary" class="m-2">
-    <b-dropdown-item @click="sort('timeAsc')">Cooking time asc</b-dropdown-item>
-    <b-dropdown-item @click="sort('timeDes')">Cooking time desc</b-dropdown-item>
-    <b-dropdown-item @click="sort('popularityAsc')">Popularity asc</b-dropdown-item>
-    <b-dropdown-item @click="sort('popularityDes')">Popularity desc</b-dropdown-item>
-  </b-dropdown>
+            <!-- <b-button @click="sort('time')" type="reset" variant="outline-info"
+              >Order by time to cook</b-button
+            >
+            <b-button @click="sort('popularity')" type="reset" variant="outline-info"
+              >Order by popularity</b-button
+            > -->
 
-      <!-- <b-button @click="sort('time')" type="reset" variant="outline-info"
-        >Order by time to cook</b-button
-      >
-      <b-button @click="sort('popularity')" type="reset" variant="outline-info"
-        >Order by popularity</b-button
-      > -->
+            <b-row v-for="r in recipes" :key="r.id">
+              <RecipePreview class="recipePreview" :recipe="r" />
+            </b-row>
+          </b-container>
+        </th>
+        <th>
+        <h2 v-if="recipes.length == 0 && $root.store.username" style="text-align: center;">
+        <br>
+          <div v-show="$root.store.lastSearchResults">Here is your last search:
+            <r v-for="r in $root.store.lastSearchResults" :key="r.id">
+              <RecipePreview class="recipePreview" :recipe="r" />
+            </r>
+          </div>
+        </h2>
+        </th>
+      </tr>
+    </table>
 
-      <b-row v-for="r in recipes" :key="r.id">
-        <SearchResult class="recipePreview" :recipe="r" />
-      </b-row>
-    </b-container>
   </div>
 </template>
 
@@ -140,19 +144,19 @@ import diets from "../assets/diets.js";
 import intolerances from "../assets/intolerances.js";
 
 import { required } from "vuelidate/lib/validators";
-import SearchResult from "../components/SearchResult";
+import RecipePreview from "../components/RecipePreview";
 
 export default {
   name: "Search",
   components: {
-    SearchResult,
-  },
+    RecipePreview
+},
   data() {
     return {
       recipes: [],
       form: {
         search: "",
-        number: "",
+        number: "5",
         cuisine: null,
         diet: null,
         intolerance: null,
@@ -424,13 +428,15 @@ export default {
 
         this.recipes = [];
         this.recipes.push(...recipes);
+        console.log(this.recipes)
         if (this.$root.store.username) {
           this.$root.store.search(
             this.form.search,
             this.form.number,
             this.form.cuisine,
             this.form.diet,
-            this.form.intolerance
+            this.form.intolerance,
+            this.recipes
           );
         }
         // [
@@ -459,7 +465,7 @@ export default {
     onReset() {
       this.form = {
         search: "",
-        number: "",
+        number: "5",
         cuisine: "",
         diet: "",
         intolerance: "",
@@ -499,4 +505,22 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.search{
+  border-width: 2px;
+  border-style: solid;
+  border-color: red;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 25px;
+  border: 2px solid #283a0c;
+  font-family: 'EB Garamond';
+  font-size: 20px;
+}
+
+.title{
+  margin-top: 10px;
+  text-align: center;
+  font-family: 'EB Garamond'
+}
+</style>
