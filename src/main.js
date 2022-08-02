@@ -118,8 +118,8 @@ const shared_data = {
     this.lastSearchIntolerance = undefined;
     this.lastSearchResults = undefined;
   },
-  // server_domain:  "http://perricipes.cs.bgu.ac.il:443",
-  server_domain:  "http://localhost:80",
+  server_domain:  "https://perricipes.cs.bgu.ac.il",
+  // server_domain:  "http://localhost:80",
   search(s,num,c,d,i,lr){
     localStorage.setItem("lastSearchText",s);
     localStorage.setItem("lastSearchNum",num);
