@@ -32,26 +32,26 @@
     <b-list-group>
       <b-list-group-item class="list"><b-icon-facebook></b-icon-facebook> Popularity: {{ recipe.popularity }} Likes</b-list-group-item>
     </b-list-group>
-    <b-list-group v-if="recipe.vegan">
+    <b-list-group v-if="recipe.vegan=='true' || recipe.vegan==true">
       <b-list-group-item v-if="recipe.vegan" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegan</b-list-group-item>
     </b-list-group>
-    <b-list-group v-if="recipe.vegetarian">
+    <b-list-group v-if="recipe.vegetarian=='true' || recipe.vegetarian==true">
       <b-list-group-item v-if="recipe.vegetarian" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Vegetarian</b-list-group-item>
     </b-list-group>
-    <b-list-group v-if="recipe.gluten_free_sign">
+    <b-list-group v-if="recipe.gluten_free_sign=='true' || recipe.gluten_free_sign==true">
       <b-list-group-item v-if="recipe.gluten_free_sign" class="list"><b-icon-patch-check-fill></b-icon-patch-check-fill> Gluten-Free</b-list-group-item>
     </b-list-group>
     <br>
-    <b-list-group v-if="recipe.isWatched">
+    <b-list-group v-if="recipe.isWatched==true" >
       <b-list-group-item v-if="recipe.isWatched" class="list"><b-icon-eye-fill></b-icon-eye-fill> Watched</b-list-group-item>
     </b-list-group>
-    <b-list-group v-if="recipe.isPrefered || !isPressed">
+    <b-list-group v-if="recipe.isPrefered==true || !isPressed">
       <b-list-group-item v-if="recipe.isPrefered || !isPressed" class="list"><b-icon-heart-fill></b-icon-heart-fill> Favorite!</b-list-group-item>
     </b-list-group>
   
   </router-link>
-      <b-card-body v-if="isPressed && recipe.isPrefered==false && $root.store.username && is_my_created==false && is_my_family==false" >
-      <b-button v-if="isPressed && recipe.isPrefered==false && $root.store.username" @click="MarkAsFavorite" style="margin-left: 30%;font-family: Garamond, serif;" variant="outline-dark" >Mark as favorite <b-icon-heart-fill></b-icon-heart-fill> </b-button>
+      <b-card-body v-if="isPressed && (recipe.isPrefered==false) && $root.store.username && is_my_created==false && is_my_family==false" >
+      <b-button v-if="isPressed && (recipe.isPrefered==false) && $root.store.username" @click="MarkAsFavorite" style="margin-left: 30%;font-family: Garamond, serif;" variant="outline-dark" >Mark as favorite <b-icon-heart-fill></b-icon-heart-fill> </b-button>
     </b-card-body>
 <br>
 </div>
