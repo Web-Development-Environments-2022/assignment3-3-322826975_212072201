@@ -6,6 +6,7 @@
       :is_random="false"
       :is_my_created="true"
       :is_favorite = "false"
+      :is_my_family="false"
       :class="{
         row: true,
         RandomRecipes: true,

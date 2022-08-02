@@ -119,7 +119,10 @@
             > -->
 
             <b-row v-for="r in recipes" :key="r.id">
-              <RecipePreview class="recipePreview" :recipe="r" />
+              <RecipePreview class="recipePreview" :recipe="r"
+                                   :is_my_created=false
+        :is_my_family=false
+ />
             </b-row>
           </b-container>
         </th>
@@ -128,7 +131,10 @@
         <br>
           <div v-show="$root.store.lastSearchResults">Here is your last search:
             <r v-for="r in $root.store.lastSearchResults" :key="r.id">
-              <RecipePreview class="recipePreview" :recipe="r" />
+              <RecipePreview class="recipePreview" :recipe="r"  
+                     :is_my_created=false
+        :is_my_family=false
+ />
             </r>
           </div>
         </h2>
@@ -194,187 +200,28 @@ export default {
     },
     async Search() {
       // console.log("search clicked")
-      let recipes = [
-        {
-          id: 340,
-          image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-          ingredients_list: (5)[
-            ({
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            })
-          ],
-          instructions:
-            "Place all ingredients in a blender and blend until smooth.",
-          isPrefered: false,
-          isWatched: false,
-          pieces_amount: 1,
-          popularity: 55,
-          time_to_cook: 2,
-          title: "Skinny Green Monster Smoothie",
-          vegan: false,
-          vegetarian: false,
-          gluten_free_sign: true,
-        },
-        {
-          id: 660227,
-          image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-          ingredients_list: (5)[
-            ({
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            })
-          ],
-          instructions:
-            "Place all ingredients in a blender and blend until smooth.",
-          isPrefered: false,
-          isWatched: false,
-          pieces_amount: 1,
-          popularity: 7,
-          time_to_cook: 18,
-          title: "Skinny Green Monster Smoothie",
-          vegan: false,
-          vegetarian: false,
-          gluten_free_sign: true,
-        },
-        {
-          id: 660227,
-          image: "https://spoonacular.com/recipeImages/660227-556x370.jpg",
-          ingredients_list: (5)[
-            ({
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            },
-            {
-              id: 9040,
-              aisle: "Produce",
-              image: "bananas.jpg",
-              consistency: "SOLID",
-              name: "banana",
-            })
-          ],
-          instructions:
-            "Place all ingredients in a blender and blend until smooth.",
-          isPrefered: false,
-          isWatched: false,
-          pieces_amount: 1,
-          popularity: 10,
-          time_to_cook: 12,
-          title: "Skinny Green Monster Smoothie",
-          vegan: false,
-          vegetarian: false,
-          gluten_free_sign: true,
-        },
-      ];
       try {
         const response = await this.axios.get(
-          this.$root.store.server_domain + `/users/`
-          // "https://test-for-3-2.herokuapp.com/user/Register",
-          // this.$root.store.server_domain + "/users/search_recipe",{
-          //   params:
-          //   {
-          //   search_string: this.form.search,
-          //   num: this.form.number,
-          //   cuisine: this.form.cuisine,
-          //   diet:this.form.diet,
-          //   intolerance:this.form.intolerance,
-          // },
-          // withCredentials:true
-          // }
+          this.$root.store.server_domain + `/recipes/search_recipe`,{
+            params:
+            {
+            search_string: this.form.search,
+            num: this.form.number,
+            cuisine: this.form.cuisine,
+            diet:this.form.diet,
+            intolerance:this.form.intolerance,
+          },
+          withCredentials:true
+          }
         );
         // let recipes = [obj, obj, obj];
-        // const recipes = response.data.recipes_objects;
+        const recipes = response.data.recipes_objects;
         this.recipes = [];
         this.recipes.push(...recipes);
         console.log(this.recipes);
         if (recipes.length== 0){
           this.form.submitError = "No results found!";
+          return;
         }
 
         if (this.$root.store.username) {
@@ -396,8 +243,8 @@ export default {
         // ]);
         // console.log("search finished");
       } catch (err) {
-        console.log(err.response);
-        this.form.submitError = err.response.data.message;
+        console.log(err);
+        this.form.submitError = "No results found!";
       }
     },
     onSearch() {
